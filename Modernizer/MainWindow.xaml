@@ -5,8 +5,38 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Modernizer"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-
+        Title="MainWindow" Height="450" Width="800"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <Grid Margin="1">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="3*" />
+        </Grid.ColumnDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="4*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid Row="0">
+                <ListView Name="MyListView" ItemsSource="{Binding Path=Applications}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate DataType="local:ConsoleApplication">
+                            <ListViewItem Content="{Binding Name}" MouseDoubleClick="Control_OnMouseDoubleClick"/>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+            <Grid Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Button Content="Add" Click="ButtonBase_OnClick" />
+            </Grid>
+        </Grid>
     </Grid>
 </Window>
