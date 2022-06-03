@@ -3,39 +3,94 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Modernizer"
+        xmlns:model="clr-namespace:Modernizer.Model"
+        xmlns:converter="clr-namespace:Modernizer.Converter"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800"
-        DataContext="{Binding RelativeSource={RelativeSource Self}}">
+        Title="Modernizer"
+        Height="450"
+        Width="800"
+        WindowStartupLocation="CenterScreen"
+        DataContext="{Binding 
+        RelativeSource={RelativeSource Self}}"
+        Closing="MainWindow_OnClosing">
+
     <Grid Margin="1">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="3*" />
         </Grid.ColumnDefinitions>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="4*" />
+                <RowDefinition Height="10*" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid Row="0">
-                <ListView Name="MyListView" ItemsSource="{Binding Path=Applications}">
-                    <ListView.ItemTemplate>
-                        <DataTemplate DataType="local:ConsoleApplication">
-                            <ListViewItem Content="{Binding Name}" MouseDoubleClick="Control_OnMouseDoubleClick"/>
+                <TreeView Name="MyListView" BorderThickness="0">
+                    <TreeView.ItemContainerStyle>
+                        <Style TargetType="TreeViewItem">
+                            <Setter Property="Focusable" Value="False" />
+                        </Style>
+                    </TreeView.ItemContainerStyle>
+                    <TreeView.ItemTemplate>
+                        <DataTemplate DataType="model:ConsoleApplication">
+                            <!-- <ListViewItem> -->
+                            <!-- <Label Content="{Binding Name}" Height="20" Padding="0" VerticalContentAlignment="Center" /> -->
+                            <!-- <Button Content="Start" IsEnabled="{Binding IsRunning}" /> -->
+                            <!-- <StackPanel Orientation="Horizontal"> -->
+                            <TreeViewItem>
+                                <TreeViewItem.Header>
+                                    <WrapPanel>
+                                        <WrapPanel.Resources>
+                                            <Style TargetType="Button">
+                                                <Setter Property="Margin" Value="2" />
+                                                <Setter Property="MinWidth" Value="50" />
+                                            </Style>
+                                            <converter:BooleanConverter x:Key="BooleanConverter" />
+                                        </WrapPanel.Resources>
+                                        <Button Content="Start"
+                                                IsEnabled="{Binding 
+                                                    Path=IsRunning, 
+                                                    Converter={StaticResource BooleanConverter}}"
+                                                Click="StartButton_OnClick" />
+                                        <Button Content="Stop"
+                                                IsEnabled="{Binding IsRunning}"
+                                                Click="StopButton_OnClick" />
+                                        <Button Content="Restart"
+                                                Click="RestartButton_OnClick" />
+                                        <Button Content="Folder"
+                                                Click="FolderButton_OnClick" />
+                                        <Label Content="{Binding Name}" />
+                                    </WrapPanel>
+                                </TreeViewItem.Header>
+                                <TextBox ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                         ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                         ScrollViewer.CanContentScroll="True"
+                                         Text="{Binding Output}"
+                                         IsReadOnly="True"
+                                         MaxLines="10" />
+                            </TreeViewItem>
+                            <!-- </StackPanel> -->
+                            <!-- </ListViewItem> -->
                         </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                    </TreeView.ItemTemplate>
+                </TreeView>
             </Grid>
             <Grid Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
-                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <Button Content="Add" Click="ButtonBase_OnClick" />
+                <CheckBox
+                    Grid.ColumnSpan="2"
+                    Content="Launch at system startup"
+                    Checked="ToggleButton_OnChecked"
+                    Unchecked="ToggleButton_OnUnchecked" />
             </Grid>
         </Grid>
     </Grid>
